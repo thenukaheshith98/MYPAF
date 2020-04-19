@@ -33,45 +33,53 @@ public class AppointmnetRepository {
 		a1.setType_of_case("fewer");
 		a1.setD_name("nakawita i.m.");
 		
-//		Appointment a2 = new Appointment();
-//		a2.setP_id(2);
-//		a2.setP_name("t.i alwis");
-//		a2.setP_age(14);
-//		a2.setType_of_case("knee pain");
-//		a2.setD_name("perera k.f");
-//		
-//		Appointment a3 = new Appointment();
-//		a3.setP_id(3);
-//		a3.setP_name("w.d. jennifer");
-//		a3.setP_age(56);
-//		a3.setType_of_case("migraine");
-//		a3.setD_name("premasiri r.n.");
 		
 		appointment.add(a1);
-//		appointment.add(a2);
-//		appointment.add(a3);
-//		
+
+		
 	}
 	
 	public List<Appointment> getAllAppointments() {
 		return appointment;
 	}
 	
-	
-	public Appointment ViewAllAppointmnet(Appointment a1) {
-		String viewsql = "SELECT * FROM `appointmnets` WHERE `p_id`=?";
+
+	public Appointment ViewAllAppointmnets(Appointment a1) {
+		String output = "";
 		try {
-			PreparedStatement st = con.prepareStatement(viewsql);
-			st.setInt(1, a1.p_id);
-			st.executeUpdate();
-		}catch(Exception e) {
-			System.out.println(e);
-		}
+			output = "<table border=\\\"1\\\"><tr><th>Patient ID</th><th>Patient Name</th><th>Patient Age</th><th>Type of Case</th><th>Doctor Name</th><th>Update</th><th>Remove</th></tr>";
+			String query = "select * from appointmnets";				Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			
+			while (rs.next()) {
+				String p_id = rs.getString("Patient ID");
+				String p_name = rs.getString("Patient Name");
+				String p_age =  rs.getString("Patient Age");
+				String type_of_case =rs.getString("Type of Case");
+				String d_name =rs.getString("Doctor Name");
+				
+				output += "<tr><td>" + p_name + "</td>";
+				output += "<td>" + p_age + "</td>";
+				output += "<td>" + type_of_case + "</td>"; 
+				output += "<td>" + d_name + "</td>";
+				  
+				  output += "<td><input name=\"btnUpdate\" type=\"button\"value=\"Update\" class=\"btn btn-secondary\"></td>"+ "<td><form method=\"post\" action=\"doctor.jsp\">"+"<input name=\"btnRemove\" type=\"submit\" value=\"Remove\" class=\"btn btn-danger\">"
+							 + "<input name=\"drID\" type=\"hidden\" value=\"" + p_id
+							 + "\">" + "</form></td></tr>";
+							 }
+							 con.close();
+							 
+							 output += "</table>";
+		 }catch (Exception e)
+		 {
+			 output = "Error while reading the Doctor details .";
+			 System.err.println(e.getMessage());
+			 }
+			 return a1;
+			}
 		
-		return a1;
-	}
 	
-	
+
 	public Appointment CreateAppointment(Appointment a1) {
 		String insertSql = "INSERT INTO `appointmnets`(`p_id`, `p_name`, `p_age`, `type_of_case`, `d_name`) VALUES (?,?,?,?,?)";
 		try {

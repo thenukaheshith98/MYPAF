@@ -31,9 +31,10 @@ public class AppointmentResource {
 	
 	@GET
 	@Path("/Appointmentview")
-	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.TEXT_HTML})
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Appointment ViewAllAppointmnet(Appointment a1){
-		return ar.ViewAllAppointmnet(a1);
+		return ar.ViewAllAppointmnets(a1);
 	}
 	
 	@POST
